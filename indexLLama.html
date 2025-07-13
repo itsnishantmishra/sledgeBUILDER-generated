@@ -1,0 +1,309 @@
+Here is a sample code for the website:
+
+**HTML**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Dress Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#catalog">Catalog</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Welcome to Our Women's Dress Store</h1>
+            <p>Explore our latest collection of stylish dresses for every occasion.</p>
+            <button>Shop Now</button>
+            <div class="featured-collection">
+                <img src="featured-collection.jpg" alt="Featured Collection">
+                <h2>Featured Collection</h2>
+                <p>Discover our latest arrivals and must-haves.</p>
+            </div>
+        </section>
+        <section id="catalog">
+            <h1>Product Catalog</h1>
+            <form>
+                <label for="style">Style:</label>
+                <select id="style">
+                    <option value="">All</option>
+                    <option value="casual">Casual</option>
+                    <option value="formal">Formal</option>
+                    <option value="party">Party</option>
+                </select>
+                <label for="size">Size:</label>
+                <select id="size">
+                    <option value="">All</option>
+                    <option value="xs">XS</option>
+                    <option value="s">S</option>
+                    <option value="m">M</option>
+                    <option value="l">L</option>
+                    <option value="xl">XL</option>
+                </select>
+                <label for="color">Color:</label>
+                <select id="color">
+                    <option value="">All</option>
+                    <option value="red">Red</option>
+                    <option value="pink">Pink</option>
+                    <option value="black">Black</option>
+                    <option value="white">White</option>
+                </select>
+                <label for="price">Price:</label>
+                <select id="price">
+                    <option value="">All</option>
+                    <option value="0-50">Under $50</option>
+                    <option value="50-100">$50-$100</option>
+                    <option value="100-200">$100-$200</option>
+                    <option value="200-300">$200-$300</option>
+                </select>
+                <button>Filter</button>
+            </form>
+            <ul id="products">
+                <!-- product list will be generated here -->
+            </ul>
+        </section>
+        <section id="about">
+            <h1>About Us</h1>
+            <p>We are a women's dress store dedicated to providing high-quality, stylish dresses for every occasion.</p>
+            <img src="about.jpg" alt="About Us">
+        </section>
+        <section id="testimonials">
+            <h1>Testimonials</h1>
+            <ul>
+                <li>
+                    <p>"I love this dress! It's perfect for a night out with friends."</p>
+                    <img src="testimonial-1.jpg" alt="Testimonial 1">
+                </li>
+                <li>
+                    <p>"The quality of the dress is exceptional. I've received so many compliments."</p>
+                    <img src="testimonial-2.jpg" alt="Testimonial 2">
+                </li>
+                <li>
+                    <p>"I've never felt so confident and beautiful in a dress before."</p>
+                    <img src="testimonial-3.jpg" alt="Testimonial 3">
+                </li>
+            </ul>
+        </section>
+        <section id="contact">
+            <h1>Contact Us</h1>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message"></textarea>
+                <button>Send</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Women's Dress Store</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+**CSS (in styles.css file)**
+
+```css
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+}
+
+section {
+    background-color: #f7f7f7;
+    padding: 2em;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+.featured-collection {
+    background-image: url("featured-collection.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.product img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.product h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.product p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.testimonial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.testimonial img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.testimonial p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+    clear: both;
+}
+```
+
+**JavaScript (in script.js file)**
+
+```javascript
+// Get the product list element
+const productList = document.getElementById('products');
+
+// Function to generate product list
+function generateProductList(products) {
+    const html = products.map((product) => {
+        return `
+            <li>
+                <img src="${product.image}" alt="${product.name}">
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                <button>Buy Now</button>
+            </li>
+        `;
+    }).join('');
+    productList.innerHTML = html;
+}
+
+// Get the product data
+fetch('products.json')
+   .then((response) => response.json())
+   .then((products) => generateProductList(products));
+```
+
+**products.json file**
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Dress 1",
+        "image": "dress-1.jpg",
+        "description": "This is a beautiful dress for a night out.",
+        "price": 50
+    },
+    {
+        "id": 2,
+        "name": "Dress 2",
+        "image": "dress-2.jpg",
+        "description": "This is a stylish dress for a party.",
+        "price": 75
+    },
+    {
+        "id": 3,
+        "name": "Dress 3",
+        "image": "dress-3.jpg",
+        "description": "This is a elegant dress for a formal occasion.",
+        "price": 100
+    }
+]
+```
+
+Note: This is just a sample code and you will need to modify it to fit your specific needs. You will also need to create the images and product data files.
