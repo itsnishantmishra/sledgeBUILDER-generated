@@ -1,0 +1,169 @@
+```javascript
+// server/index.js
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products');
+const orderRoutes = require('./routes/orders');
+const supplierRoutes = require('./routes/suppliers');
+const shipmentRoutes = require('./routes/shipments');
+const { verifyRole } = require('./middleware/auth');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', verifyRole(['customer', 'admin']), orderRoutes);
+app.use('/api/suppliers', verifyRole(['admin']), supplierRoutes);
+app.use('/api/shipments', verifyRole(['admin', 'supplier']), shipmentRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+```
+
+```javascript
+// client/src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Orders from './pages/Orders';
+import Suppliers from './pages/Suppliers';
+import Login from './pages/Login';
+import PrivateRoute from './components/PrivateRoute';
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
+          <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
+          <Route path="/suppliers" element={<PrivateRoute roles={['admin']}><Suppliers /></PrivateRoute>} />
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;
+```
+
+```javascript
+// client/src/components/InventoryWidget.jsx
+import { useEffect, useState } from 'react';
+import api from '../api';
+
+const InventoryWidget = () => {
+  const [inventory, setInventory] = useState([]);
+
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const { data } = await api.get('/products');
+        setInventory(data);
+      } catch (error) {
+        console.error('Error fetching inventory:', error);
+      }
+    };
+    fetchInventory();
+    const interval = setInterval(fetchInventory, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {inventory.map(item => (
+        <div key={item._id} className="p-4 bg-white rounded-lg shadow">
+          <h3 className="font-bold">{item.name}</h3>
+          <p>Stock: {item.quantity}</p>
+          <p>Location: {item.location}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default InventoryWidget;
+```
+
+```javascript
+// server/models/Order.js
+const mongoose = require('mongoose');
+
+const orderSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  items: [{
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    quantity: Number
+  }],
+  status: { type: String, enum: ['pending', 'processing', 'shipped', 'delivered'], default: 'pending' },
+  shipment: { type: mongoose.Schema.Types.ObjectId, ref: 'Shipment' },
+  total: Number,
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Order', orderSchema);
+```
+
+```javascript
+// server/seed.js
+const mongoose = require('mongoose');
+const { User, Product, Order, Supplier } = require('./models');
+
+const seedData = async () => {
+  const admin = await User.create({
+    email: 'admin@example.com',
+    password: 'admin123',
+    role: 'admin'
+  });
+
+  const supplier = await User.create({
+    email: 'supplier@example.com',
+    password: 'supplier123',
+    role: 'supplier'
+  });
+
+  const product = await Product.create({
+    name: 'Sample Product',
+    description: 'Example description',
+    price: 99.99,
+    quantity: 100,
+    supplier: supplier._id
+  });
+
+  await Order.create({
+    user: admin._id,
+    items: [{ product: product._id, quantity: 2 }],
+    total: 199.98,
+    status: 'processing'
+  });
+
+  await Supplier.create({
+    name: 'Sample Supplier',
+    contact: 'supplier@example.com',
+    address: '123 Main St'
+  });
+};
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => seedData())
+  .then(() => console.log('Database seeded'))
+  .catch(err => console.error(err))
+  .finally(() => process.exit());
+```
